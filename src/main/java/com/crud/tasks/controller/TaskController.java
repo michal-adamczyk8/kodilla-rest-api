@@ -2,6 +2,7 @@ package com.crud.tasks.controller;
 
 import com.crud.tasks.domain.TaskDto;
 import com.crud.tasks.mapper.TaskMapper;
+import com.crud.tasks.repository.TaskRepository;
 import com.crud.tasks.service.DbService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -22,8 +23,10 @@ public class TaskController {
 
     @RequestMapping(method = RequestMethod.GET, value = "getTasks")
     public List<TaskDto> getTasks() {
-        return new ArrayList<>();
+        return taskMapper.mapToTaskDtoList(service.getAllTasks());
     }
+
+
 
     @RequestMapping(method = RequestMethod.GET, value = "getTask")
     public TaskDto getTask(@RequestParam Long taskId) throws TaskNotFoundException {
@@ -33,11 +36,8 @@ public class TaskController {
     @Transactional
     @RequestMapping(method = RequestMethod.DELETE, value = "deleteTask")
     public void deleteTask(@RequestParam Long taskId) throws TaskNotFoundException {
-        try {
             service.deleteTask(taskId);
-        } catch (Exception e) {
-            System.out.println(e);
-        }
+
     }
 
     @RequestMapping(method = RequestMethod.PUT, value = "updateTask")
