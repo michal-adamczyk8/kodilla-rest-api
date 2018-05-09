@@ -8,10 +8,7 @@ import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import java.net.URI;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Component
 public class TrelloClient {
@@ -32,7 +29,7 @@ public class TrelloClient {
     RestTemplate restTemplate;
 
     private URI createUrl() {
-        URI url = UriComponentsBuilder.fromHttpUrl(trelloApiEndpoint + "/members/kodillauser/boards")
+        URI url = UriComponentsBuilder.fromHttpUrl(trelloApiEndpoint + "/members/" + trelloUsername + "/boards")
                 .queryParam("key", trelloAppKey)
                 .queryParam("token", trelloToken)
                 .queryParam("fields", "name,id")
@@ -43,10 +40,6 @@ public class TrelloClient {
     public List<TrelloBoardDto> getTrelloBoards() {
         TrelloBoardDto[] boardsResponse = restTemplate.getForObject(createUrl(), TrelloBoardDto[].class);
 
-        Optional<TrelloBoardDto[]> optBoard = Optional.ofNullable(boardsResponse);
-
-        List<TrelloBoardDto> trelloBoardsNotNull = new ArrayList<>();
-        optBoard.ifPresent(response -> Arrays.asList(response));
-        return trelloBoardsNotNull;
+        return Optional.ofNullable(boardsResponse).map(Arrays::asList).orElse(Collections.emptyList());
     }
 }
