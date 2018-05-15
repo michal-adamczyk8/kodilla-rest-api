@@ -15,5 +15,5 @@ import java.util.List;
 public class AttachmentsByTypeDto {
 
     @JsonProperty("trello")
-    private List<TrelloDto> trello;
+    private TrelloDto trello;
 }
