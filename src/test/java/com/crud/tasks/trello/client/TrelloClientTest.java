@@ -99,5 +99,4 @@ public class TrelloClientTest {
         //Then
         Assert.assertEquals(0,emptyTrelloBoard.size());
     }
-
 }
