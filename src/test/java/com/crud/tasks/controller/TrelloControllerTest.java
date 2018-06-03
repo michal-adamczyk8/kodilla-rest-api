@@ -1,6 +1,11 @@
 package com.crud.tasks.controller;
 
 
+import com.crud.tasks.domain.CreatedTrelloCardDto;
+import com.crud.tasks.domain.TrelloBoardDto;
+import com.crud.tasks.domain.TrelloCardDto;
+import com.crud.tasks.domain.TrelloListDto;
+import com.crud.tasks.trello.facade.TrelloFacade;
 import com.google.gson.Gson;
 import org.hamcrest.Matchers;
 import org.junit.Test;
@@ -40,7 +45,7 @@ public class TrelloControllerTest {
         List<TrelloBoardDto> trelloBoards = new ArrayList<>();
         when(trelloFacade.fetchTrelloBoards()).thenReturn(trelloBoards);
         //When & Then
-        mockMvc.perform(get("v1/trello/getTrelloBoards").contentType(MediaType.APPLICATION_JSON))
+        mockMvc.perform(get("/v1/trello/getTrelloBoards").contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().is(200))
                 .andExpect(jsonPath("$", hasSize(0)));
     }
@@ -57,7 +62,7 @@ public class TrelloControllerTest {
         when(trelloFacade.fetchTrelloBoards()).thenReturn(trelloBoards);
 
         //When & Then
-        mockMvc.perform(get("v1/trello/getTrelloBoards").contentType(MediaType.APPLICATION_JSON))
+        mockMvc.perform(get("/v1/trello/getTrelloBoards").contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 //Trello board fields
                 .andExpect(jsonPath("$", hasSize(1)))
@@ -67,7 +72,7 @@ public class TrelloControllerTest {
                 .andExpect(jsonPath("$[0].lists", hasSize(1)))
                 .andExpect(jsonPath("$[0].lists[0].id", Matchers.is("1")))
                 .andExpect(jsonPath("$[0].lists[0].name", Matchers.is("Test List")))
-                .andExpect(jsonPath("$[0].lists[0]", Matchers.is(false)));
+                .andExpect(jsonPath("$[0].lists[0].closed", Matchers.is(false)));
     }
 
     @Test
@@ -80,24 +85,25 @@ public class TrelloControllerTest {
                 "1"
         );
 
-        CreatedTrelloCardDto createdTrelloCardDto = new CreatedTrelloCardDto(
-                "323",
-                "Test",
-                "http://test.com");
+    CreatedTrelloCardDto createdTrelloCardDto = new CreatedTrelloCardDto(
+            "323",
+            "Test",
+            "http://test.com");
 
-        when(trelloFacade.createCard(any(TrelloCardDto.class))).thenReturn(createdTrelloCardDto);
+    when(trelloFacade.createCard(any(TrelloCardDto.class))).thenReturn(createdTrelloCardDto);
         //Given
         Gson gson = new Gson();
         String jsonContent = gson.toJson(trelloCardDto);
 
+
         //When & Then
         mockMvc.perform(post("/v1/trello/createTrelloCard")
         .contentType(MediaType.APPLICATION_JSON)
-                .characterEncoding("UTF-8")
-                .content(jsonContent))
-                .andExpect(jsonPath("$.id", is("323")))
-                .andExpect(jsonPath("$.name", is("Test")))
-                .andExpect(jsonPath("4.shortUrl", is("http://test.com")));
+        .characterEncoding("UTF-8")
+        .content(jsonContent))
+        .andExpect(jsonPath("$.id", is("323")))
+        .andExpect(jsonPath("$.name", is("Test")))
+        .andExpect(jsonPath("$.shortUrl", is("http://test.com")));
 
-    }
+        }
 }

@@ -1,6 +1,11 @@
 package com.crud.tasks.facade;
 
 
+import com.crud.tasks.domain.*;
+import com.crud.tasks.mapper.TrelloMapper;
+import com.crud.tasks.service.TrelloService;
+import com.crud.tasks.trello.facade.TrelloFacade;
+import com.crud.tasks.trello.validator.TrelloValidator;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -32,7 +37,7 @@ public class TrelloFacadeTest {
 
     @Test
     public void shouldFetchEmptyList() {
-        //Given
+        /* Given */
         List<TrelloListDto> trelloLists = new ArrayList<>();
         trelloLists.add(new TrelloListDto("1", "test_list", false));
 
