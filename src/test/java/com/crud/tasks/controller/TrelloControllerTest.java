@@ -91,7 +91,6 @@ public class TrelloControllerTest {
             "http://test.com");
 
     when(trelloFacade.createCard(any(TrelloCardDto.class))).thenReturn(createdTrelloCardDto);
-        //Given
         Gson gson = new Gson();
         String jsonContent = gson.toJson(trelloCardDto);
 

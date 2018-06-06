@@ -11,6 +11,7 @@ import java.util.List;
 
 @AllArgsConstructor
 @Getter
+@NoArgsConstructor
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class CreatedTrelloCardDto {
 

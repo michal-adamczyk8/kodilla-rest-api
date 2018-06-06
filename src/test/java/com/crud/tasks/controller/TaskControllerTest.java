@@ -21,6 +21,8 @@ import java.util.Optional;
 
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
+import static org.mockito.Matchers.any;
+import static org.mockito.Matchers.anyLong;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -84,15 +86,36 @@ public class TaskControllerTest {
         Gson gson = new Gson();
         String jsonContent = gson.toJson(taskDto.getId());
 
-        when(dbService.getTask(taskDto.getId())).thenReturn(Optional.of(task));
-        when(taskMapper.mapToTaskDto(task)).thenReturn(taskDto);
+        when(dbService.getTask(1L)).thenReturn(Optional.of(task));
+        when(taskMapper.mapToTaskDto(any())).thenReturn(taskDto);
 
-        mockMvc.perform(get("/v1/task/getTask")
+        //When  & Then
+        mockMvc.perform(get("/v1/task/getTask?taskId=1")
                 .contentType(MediaType.APPLICATION_JSON)
                 .characterEncoding("UTF-8")
                 .content(jsonContent))
                 .andExpect(jsonPath("$.id", is(1)))
                 .andExpect(jsonPath("$.title", is("test")))
                 .andExpect(jsonPath("$.content", is("testing")));
+    }
+
+    @Test
+    public void shouldCreateTask() throws Exception {
+        //Given
+        TaskDto taskDto = new TaskDto(1l, "test", "testing");
+        Task task = new Task(1l, "test", "testing");
+
+        when(dbService.saveTask(any())).thenReturn(task);
+        when(taskMapper.mapToTaskDto(any())).thenReturn(taskDto);
+        Gson gson = new Gson();
+        String jsonContent = gson.toJson(taskDto);
+
+        //When
+        mockMvc.perform(post("/v1/task/createTask")
+            .contentType(MediaType.APPLICATION_JSON)
+            .content(jsonContent))
+            .andExpect(status().isOk());
+
+
     }
 }
