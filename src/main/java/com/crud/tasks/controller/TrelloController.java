@@ -3,14 +3,13 @@ package com.crud.tasks.controller;
 import com.crud.tasks.domain.CreatedTrelloCardDto;
 import com.crud.tasks.domain.TrelloBoardDto;
 import com.crud.tasks.domain.TrelloCardDto;
-import com.crud.tasks.service.TrelloService;
 import com.crud.tasks.trello.facade.TrelloFacade;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 
 import java.util.List;
-@TaskControllerInfo
+@ControllerInfo
 
 @CrossOrigin(origins = "*")
 @RestController
