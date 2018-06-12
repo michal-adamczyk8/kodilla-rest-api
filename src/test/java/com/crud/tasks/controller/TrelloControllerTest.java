@@ -5,6 +5,7 @@ import com.crud.tasks.domain.CreatedTrelloCardDto;
 import com.crud.tasks.domain.TrelloBoardDto;
 import com.crud.tasks.domain.TrelloCardDto;
 import com.crud.tasks.domain.TrelloListDto;
+import com.crud.tasks.service.TrelloService;
 import com.crud.tasks.trello.facade.TrelloFacade;
 import com.google.gson.Gson;
 import org.hamcrest.Matchers;
@@ -37,13 +38,13 @@ public class TrelloControllerTest {
     private MockMvc mockMvc;
 
     @MockBean
-    private TrelloFacade trelloFacade;
+    private TrelloService trelloService;
 
     @Test
     public void shouldFetchEmptyTrelloBoards() throws Exception {
         //Given
         List<TrelloBoardDto> trelloBoards = new ArrayList<>();
-        when(trelloFacade.fetchTrelloBoards()).thenReturn(trelloBoards);
+        when(trelloService.fetchTrelloBoards()).thenReturn(trelloBoards);
         //When & Then
         mockMvc.perform(get("/v1/trello/getTrelloBoards").contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().is(200))
@@ -59,7 +60,7 @@ public class TrelloControllerTest {
         List<TrelloBoardDto> trelloBoards = new ArrayList<>();
         trelloBoards.add(new TrelloBoardDto("1", "Test Task", trelloLists));
 
-        when(trelloFacade.fetchTrelloBoards()).thenReturn(trelloBoards);
+        when(trelloService.fetchTrelloBoards()).thenReturn(trelloBoards);
 
         //When & Then
         mockMvc.perform(get("/v1/trello/getTrelloBoards").contentType(MediaType.APPLICATION_JSON))
@@ -90,7 +91,7 @@ public class TrelloControllerTest {
             "Test",
             "http://test.com");
 
-    when(trelloFacade.createCard(any(TrelloCardDto.class))).thenReturn(createdTrelloCardDto);
+    when(trelloService.createdTrelloCard(any(TrelloCardDto.class))).thenReturn(createdTrelloCardDto);
         Gson gson = new Gson();
         String jsonContent = gson.toJson(trelloCardDto);
 
@@ -103,6 +104,5 @@ public class TrelloControllerTest {
         .andExpect(jsonPath("$.id", is("323")))
         .andExpect(jsonPath("$.name", is("Test")))
         .andExpect(jsonPath("$.shortUrl", is("http://test.com")));
-
         }
 }
