@@ -7,6 +7,7 @@ import com.crud.tasks.service.SimpleEmailService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
+import org.thymeleaf.context.Context;
 
 @Component
 public class EmailScheduler {
@@ -25,6 +26,9 @@ public class EmailScheduler {
     @Scheduled(cron = "0 0 10 * * * ")
     public void sendInformationEmail() {
         long  size = taskRepository.count();
+
+//        Context context = new Context();
+//        context.setVariable();
 
         String taskAsString = size <= 1 ? " task" : " tasks";
         simpleEmailService.send(new Mail(
