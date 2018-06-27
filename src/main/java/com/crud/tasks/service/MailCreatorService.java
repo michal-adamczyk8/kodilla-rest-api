@@ -42,4 +42,15 @@ public class MailCreatorService {
         context.setVariable("application_functionality", functionality);
         return templateEngine.process("mail/created-trello-card-mail",context);
     }
+
+    public String buildTaskReminderEmail(String message) {
+        Context context = new Context();
+
+        context.setVariable("message", message);
+        context.setVariable("admin_info", adminConfig);
+        context.setVariable("button", "Visit website");
+        context.setVariable("tasks_url", "https://michal-adamczyk8.github.io/");
+
+        return  templateEngine.process("mail/task-reminder-mail", context);
+    }
 }
