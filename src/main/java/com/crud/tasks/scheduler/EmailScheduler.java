@@ -15,8 +15,10 @@ public class EmailScheduler {
 
     @Autowired
     private SimpleEmailService simpleEmailService;
+
     @Autowired
     private TaskRepository taskRepository;
+
     @Autowired
     private AdminConfig adminConfig;
 
